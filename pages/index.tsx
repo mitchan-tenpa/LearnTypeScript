@@ -18,9 +18,20 @@ import { isTargetLikeServerless } from 'next/dist/server/config';
 
 const SCROLLBAR_SIZE = 10;
 
+const ScrollScreen = styled("div", {
+  display: "flex",
+  width: "80%",
+  height: 225,
+  borderRadius: 4,
+  overflow: 'hidden',
+  boxShadow: `0 2px 10px ${blackA.blackA7}`,
+});
+
 const StyledScrollArea = styled(ScrollAreaPrimitive.Root, {
+  flexDirection: "row",
   width: 200,
   height: 225,
+  margin: "0 auto",
   borderRadius: 4,
   overflow: 'hidden',
   boxShadow: `0 2px 10px ${blackA.blackA7}`,
@@ -83,12 +94,24 @@ const ScrollAreaCorner = StyledCorner;
 const Box = styled('div', {});
 const Text = styled('div', {
   color: violet.violet11,
+  textAlign: "center",
   fontSize: 15,
   lineHeight: '18px',
   fontWeight: 500,
 });
+
 const Tag = styled('div', {
   color: mauve.mauve12,
+  fontSize: 13,
+  lineHeight: '18px',
+  marginTop: 10,
+  borderTop: `1px solid ${mauve.mauve6}`,
+  paddingTop: 10,
+});
+
+const Task = styled('div', {
+  color: mauve.mauve12,
+  textAlign: "center",
   fontSize: 13,
   lineHeight: '18px',
   marginTop: 10,
@@ -150,24 +173,21 @@ const ScrollAreaDemo: NextPage = () => {
   const [ tasks, setTasks] = useState([]);
 
   const handleChange = useCallback((e) => {
+    e.preventDefault();
     setText(e.target.value.trim());
   }, []);
   
   const submitForm = (e: any) => {
     e.preventDefault();
     addTask(text);
-    // console.log(text);
-  }
+    setText("");
+  };
 
   const addTask = (text: string) => {
     setTasks([...tasks, text]);
-    // console.log(text);
-  
-    
+    console.log(text);
   }
 
-  // const members = [1,2,3,4];
-  
   return (
     <div className={styles.container}>
       <Head>
@@ -183,11 +203,7 @@ const ScrollAreaDemo: NextPage = () => {
           <div>
             <input type="text" value={text} onChange={handleChange}></input>
             <div>
-              {
-                tasks.map((text, index) => {
-                return <div key={index}>{tasks}</div>
-                })
-              }
+              
             </div>
           </div>
           <div>
@@ -199,24 +215,47 @@ const ScrollAreaDemo: NextPage = () => {
             </Button>
           </div>
         </form>
-
-        <ScrollArea>
-            <ScrollAreaViewport css={{ backgroundColor: 'white' }}>
-              <Box style={{ padding: '15px 20px' }}>
-                <Text>Tags</Text>
-                {TAGS.map((tag) => (
-                  <Tag key={tag}>{tag}</Tag>
-                ))}
-              </Box>
-            </ScrollAreaViewport>
-            <ScrollAreaScrollbar orientation="vertical">
-              <ScrollAreaThumb />
-            </ScrollAreaScrollbar>
-            <ScrollAreaScrollbar orientation="horizontal">
-              <ScrollAreaThumb />
-            </ScrollAreaScrollbar>
-            <ScrollAreaCorner />
-        </ScrollArea>
+        <ScrollScreen>
+          <ScrollArea>
+              <ScrollAreaViewport css={{ backgroundColor: 'white' }}>
+                <Box style={{ padding: '15px 20px' }}>
+                  <Text>Tasks</Text>
+                  {/* {TAGS.map((tag) => (
+                    <Tag key={tag}>{tag}</Tag>
+                  ))} */}
+                  {
+                  tasks.map((text, index) => {
+                  return <Task key={index}>{tasks}</Task>
+                  })
+                }
+                </Box>
+              </ScrollAreaViewport>
+              <ScrollAreaScrollbar orientation="vertical">
+                <ScrollAreaThumb />
+              </ScrollAreaScrollbar>
+              <ScrollAreaScrollbar orientation="horizontal">
+                <ScrollAreaThumb />
+              </ScrollAreaScrollbar>
+              <ScrollAreaCorner />
+          </ScrollArea>
+          <ScrollArea>
+              <ScrollAreaViewport css={{ backgroundColor: 'white' }}>
+                <Box style={{ padding: '15px 20px' }}>
+                  <Text>Tags</Text>
+                  {TAGS.map((tag) => (
+                    <Tag key={tag}>{tag}</Tag>
+                  ))}
+                </Box>
+              </ScrollAreaViewport>
+              <ScrollAreaScrollbar orientation="vertical">
+                <ScrollAreaThumb />
+              </ScrollAreaScrollbar>
+              <ScrollAreaScrollbar orientation="horizontal">
+                <ScrollAreaThumb />
+              </ScrollAreaScrollbar>
+              <ScrollAreaCorner />
+          </ScrollArea>
+        </ScrollScreen>
       </main>
     </div>   
   )
